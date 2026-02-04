@@ -45,7 +45,7 @@ int main(){
             //start game
         }else if(selection == 2){
             //Show tutorial;
-        }else{
+        }else if (selection != 3){
             printf("Error processing selection. Exiting the game\n");
             selection = 3;
         }

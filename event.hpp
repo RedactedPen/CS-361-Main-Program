@@ -5,7 +5,7 @@ class event{
 private:
 
 public:
-    int encounter();
+    virtual int encounter() = 0;
 };
 
 #endif
