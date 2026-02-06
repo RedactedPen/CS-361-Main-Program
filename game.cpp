@@ -2,7 +2,7 @@
 #include "input.hpp"
 
 #define HIGH_ROOM_PROBIBILITY 85
-#define MID_ROOM_PROBIBILITY 40
+#define MID_ROOM_PROBIBILITY 45
 #define LOW_ROOM_PROBIBILITY 20
 
 #define CONNECTION_CHANCE 35
@@ -15,6 +15,14 @@ int room_probibility(int depth){
     }else{
         return LOW_ROOM_PROBIBILITY;
     }    
+}
+
+char room::map_representation(){
+    if(this->entered == false){
+        return '?';
+    }else{
+        return (this->pos_x == STARTING_X && this->pos_y == STARTING_Y) ? 'S' : 'R';
+    }
 }
 
 room* board::room_connection(room* target_room, int side){
@@ -101,16 +109,18 @@ int board::can_connect(room* target_room, int side){
     if(con_room == (room*) -1){
         return 0;
     }
-    
-    //Check if con_room has already established a connection
-    if(target_room->doors[side]){
-        return 3;
-    }
 
     //Check if con_room is already generated
     if(!con_room){
         return 4;
     }
+    
+    //Check if con_room has already established a connection
+    if(con_room->doors[OPPOSITE(side)] == target_room){
+        return 3;
+    }
+
+    
 
     //Check if con_room is open to connection
     if(con_room->doors[OPPOSITE(side)] == (room*)-1){
@@ -208,10 +218,13 @@ int board::generate(room** active_room){
     this->generation_board[STARTING_Y][STARTING_X] = starting_room;
     *active_room = starting_room;
 
-    //Telling the setup room code that the bottom is the soawning side
-    //side for the room will make it mark that side as -1 due to some
+    //Telling the setup room code that the bottom is the spawning side
+    //side for the starting room will make it mark that side as -1 due to some
     //wierdness. It makes this easy though.
-    setup_room(starting_room, 0, BOTTOM);
+    int result = setup_room(starting_room, 0, BOTTOM);
+    if(result == 1){
+        return 1; 
+    }
 
     //Set each unused door to null
     for(int i = 0; i < this->rooms.size(); i++){
@@ -223,32 +236,52 @@ int board::generate(room** active_room){
         }
     }
 
+    //Set each unused room to null
+    for(int i = 0; i < GAME_SIZE; i++){
+        for(int j = 0; j < GAME_SIZE; j++){
+            if(this->generation_board[i][j] == (room*) -1){
+                this->generation_board[i][j] = NULL;
+            }
+        }
+    }
+
     return 0;
 }
 
-void board::print_dungeon(){
+void board::print_dungeon(room* current){
     for(int i = 0; i < GAME_SIZE; i++){
-        printf("_");
-    }
-    printf("\n");
-
-    for(int i = 0; i < GAME_SIZE; i++){
-        printf("|");
-        for(int j = 0; j < GAME_SIZE; j++){
+        std::string current_line = "";
+        std::string next_line = "";
+        int num_rooms = 0;
+        for(int j = 40; j < GAME_SIZE - 40; j++){
             room* room = this->generation_board[i][j];
-            if(room){
-                printf("R");
-            }else{
-                printf(" ");
-            }
-        }
-        printf("|\n");
-    }
+            if(room && room->found){
+                num_rooms++;
+                if(room == current){
+                    current_line +="*";
+                }else{
+                    current_line+= room->map_representation();
+                }
+                if(room->doors[RIGHT]){
+                    current_line += "-";
+                }else{
+                    current_line += " ";
+                }
 
-    for(int i = 0; i < GAME_SIZE; i++){
-        printf("_");
+                if(room->doors[BOTTOM]){
+                    next_line += "| ";
+                }else{
+                    next_line += "  ";
+                }
+            }else{
+                current_line += "  ";
+                next_line += "  ";
+            }       
+        }
+        if(num_rooms){
+            std::cout << current_line << std::endl << next_line << std::endl;
+        }
     }
-    printf("\n");
 }
 
 room* controller::room_interact(int* entering_side){
@@ -264,13 +297,13 @@ room* controller::room_interact(int* entering_side){
             message += std::to_string(option_number);
             message += ". Enter the door on the ";
             switch(i){
-                case 0:
+                case 1:
                     message += "right";
                     break;
-                case 1:
+                case 2:
                     message += "far";
                     break;
-                case 2:
+                case 3:
                     message += "left";
                     break; 
             }
@@ -303,12 +336,21 @@ int controller::start_game(){
         return -1;
     }
 
-    game_board.print_dungeon();
+    //game_board.print_dungeon(this->active_room);
 
     int entering_side = 2;
-
-    while(1){
-        room* new_room = room_interact(&entering_side);
+    room* new_room = this->active_room;
+    new_room->found = true;
+    while(1){       
+        new_room->entered = true;
+        for(int i = 0; i < 4; i++){
+            if(new_room->doors[i]){
+                new_room->doors[i]->found = true;
+            }
+        }
+        game_board.print_dungeon(this->active_room);
+        new_room = room_interact(&entering_side);
+        this->active_room = new_room;        
     }
 
     return 0;

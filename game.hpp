@@ -20,14 +20,18 @@
 #define OPPOSITE(val) (val < 2) ?  val + 2 : val - 2 
 
 class room{
+private:
+    event* held_event = NULL;
 public:
+    bool found = false;
+    bool entered = false;
+    
     int pos_x = -1;
     int pos_y = -1;
 
-    //-1
     room* doors[4] = {NULL, NULL, NULL, NULL};
 
-    event* held_event = NULL;
+    char map_representation();
 };
 
 class board{
@@ -69,7 +73,7 @@ public:
     //1: Fatal issue
     int generate(room** active_room);
 
-    void print_dungeon();
+    void print_dungeon(room* current);
 };
 
 class controller{
