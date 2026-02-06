@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "input.hpp"
 
 #define HIGH_ROOM_PROBIBILITY 85
 #define MID_ROOM_PROBIBILITY 40
@@ -197,7 +198,7 @@ int board::setup_room(room* target_room, int depth, int connecting_side){
     return 0;
 }
 
-int board::generate(){
+int board::generate(room** active_room){
     room* starting_room = new room;
 
     this->rooms.push_back(starting_room);
@@ -205,11 +206,22 @@ int board::generate(){
     starting_room->pos_y = STARTING_Y;
     
     this->generation_board[STARTING_Y][STARTING_X] = starting_room;
+    *active_room = starting_room;
 
     //Telling the setup room code that the bottom is the soawning side
     //side for the room will make it mark that side as -1 due to some
     //wierdness. It makes this easy though.
     setup_room(starting_room, 0, BOTTOM);
+
+    //Set each unused door to null
+    for(int i = 0; i < this->rooms.size(); i++){
+        room* current_room = this->rooms.at(i);
+        for(int j = 0; j < 4; j++){
+            if(current_room->doors[j] == (room*) -1){
+                current_room->doors[j] = NULL;
+            }
+        }
+    }
 
     return 0;
 }
@@ -239,8 +251,53 @@ void board::print_dungeon(){
     printf("\n");
 }
 
+room* controller::room_interact(int* entering_side){
+    std::string message = "You enter the room.\n";
+    int option_number = 1;
+
+    room* doors[5] = {NULL, NULL, NULL, NULL, NULL};
+
+    for(int i = 1; i < 4; i++){
+        int side = (*entering_side + i) % 4;
+        if(this->active_room->doors[side]){
+            doors[option_number] = this->active_room->doors[side];
+            message += std::to_string(option_number);
+            message += ". Enter the door on the ";
+            switch(i){
+                case 0:
+                    message += "right";
+                    break;
+                case 1:
+                    message += "far";
+                    break;
+                case 2:
+                    message += "left";
+                    break; 
+            }
+            message += " side of the room\n";
+            option_number++;
+        }
+    }
+
+    message += std::to_string(option_number);
+    message += ". Return through the door behind you\n";
+    doors[option_number] = this->active_room->doors[*entering_side];
+
+    int input = get_int_input(1, option_number, message);
+    room* new_room = doors[input];
+
+    for(int i = 0; i < 4; i++){
+        if(new_room->doors[i] == this->active_room){
+            *entering_side = i;
+            break;
+        }
+    }
+
+    return new_room;
+}
+
 int controller::start_game(){
-    int generation_result = this->game_board.generate();
+    int generation_result = this->game_board.generate(&(this->active_room));
     if(generation_result != 0){
         printf("Error generating the dungeon. Exiting\n");
         return -1;
@@ -248,5 +305,11 @@ int controller::start_game(){
 
     game_board.print_dungeon();
 
-    return this->game_board.rooms.size();
+    int entering_side = 2;
+
+    while(1){
+        room* new_room = room_interact(&entering_side);
+    }
+
+    return 0;
 }

@@ -32,7 +32,7 @@ public:
 
 class board{
 private:
-    
+    std::vector<room*> rooms;
 
     //Addressed by [y][x]. [0][0] is the top left
     room* generation_board[GAME_SIZE][GAME_SIZE] = {};
@@ -58,15 +58,16 @@ private:
     int connect_side(room* target_room, int depth, int side);
 
 public:
-    std::vector<room*> rooms;
+    
     //0: Success
     //1: Fatal issue
     int setup_room(room* target_room, int depth, int connecting_side);
 
     //Generates the full board
+    //Sets active_room to point to the starting room
     //0: Success
     //1: Fatal issue
-    int generate();
+    int generate(room** active_room);
 
     void print_dungeon();
 };
@@ -74,7 +75,10 @@ public:
 class controller{
 private:
     board game_board;
+    room* active_room;
     player held_player;
+
+    room* room_interact(int* entering_side);
 public:
 
     //Starts a brand new game
