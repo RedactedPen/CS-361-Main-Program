@@ -75,7 +75,7 @@ int main(){
 
     printf("Skeletons\n");
     printf("Encountering a group of skeletons will cause them to attack you.\n");
-    printf("They have 4 health and ahve a 75%% chance to do 1-2 damage\n");
+    printf("They have 4 health and ahve a 75%% chance to do 2 damage\n");
 
     printf("\n\n");
 
