@@ -316,17 +316,34 @@ room* controller::room_interact(int* entering_side){
     message += ". Return through the door behind you\n";
     doors[option_number] = this->active_room->doors[*entering_side];
 
-    int input = get_int_input(1, option_number, message);
-    room* new_room = doors[input];
+    message += std::to_string(option_number + 1);
+    message += ". View tutorial (Currently non funcitonal)\n";
 
-    for(int i = 0; i < 4; i++){
-        if(new_room->doors[i] == this->active_room){
-            *entering_side = i;
-            break;
+    message += std::to_string(option_number + 2);
+    message += ". Return to the title screen (Lose all progress)\n";
+
+    int input = get_int_input(1, option_number + 2, message);
+    if(input <= option_number){
+        room* new_room = doors[input];
+
+        for(int i = 0; i < 4; i++){
+            if(new_room->doors[i] == this->active_room){
+                *entering_side = i;
+                break;
+            }
         }
+        return new_room;
+    }else if(input == option_number + 1){
+        printf("\nTutorial currently not implemented\n\n");
+        return this->active_room;
+    }else if(input == option_number + 2){
+        return NULL;
+    }else{
+        printf("Error processing input\n");
+        return this->active_room;
     }
 
-    return new_room;
+    
 }
 
 int controller::start_game(){
@@ -336,7 +353,7 @@ int controller::start_game(){
         return -1;
     }
 
-    //game_board.print_dungeon(this->active_room);
+    
 
     int entering_side = 2;
     room* new_room = this->active_room;
@@ -350,6 +367,9 @@ int controller::start_game(){
         }
         game_board.print_dungeon(this->active_room);
         new_room = room_interact(&entering_side);
+        if(!new_room){
+            break;
+        }
         this->active_room = new_room;        
     }
 

@@ -2,10 +2,13 @@
 #define EVENT_HPP
 
 class event{
-private:
-
+protected:
+    bool persistent;
+    char representation;
 public:
     virtual int encounter() = 0;
+
+    char map_representation();
 };
 
 #endif

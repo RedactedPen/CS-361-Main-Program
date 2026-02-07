@@ -1,4 +1,8 @@
-# This is a very fancy makefile. Don't touch it. It works like magic, even if
+#This makefile was provided by Alex Guyer for CS162. 
+#I have slightly modified it for this project.  
+
+
+#This is a very fancy makefile. Don't touch it. It works like magic, even if
 # you add more .cpp files and .hpp files to this project. It also
 # auto-generates dependency lists as a side effect of compilation, so you'll
 # basically never need to run `make clean`. The `clean` target is still there
