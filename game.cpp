@@ -285,6 +285,9 @@ void board::print_dungeon(room* current){
 }
 
 room* controller::room_interact(int* entering_side){
+    
+
+
     std::string message = "You enter the room.\n";
     int option_number = 1;
 

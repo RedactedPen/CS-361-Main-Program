@@ -1,6 +1,7 @@
 #ifndef EVENT_HPP
 #define EVENT_HPP
 #include "player.hpp"
+
 class event{
 protected:
     bool persistent;

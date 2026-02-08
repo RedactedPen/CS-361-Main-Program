@@ -11,10 +11,10 @@ int player::heal(int ammount){
 }
 
 void player::take_damage(int ammount, std::string source){
-    printf("The ")
+    std::cout << "The  " << source << " deals " << ammount << " damage to you" << std::endl;
     this->current_health -= ammount;
 }
 
-void player::attack(combat* combat){
-    combat->damage_enemy(this->damage);
+int player::attack(){
+    return this->damage;
 }

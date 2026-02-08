@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "item.hpp" 
+#include "item.hpp"
 
 class player{
 private:
@@ -13,9 +13,6 @@ private:
     int damage = 2;
 
     std::vector<item> inventory;
-
-    //Handles killing the player
-    void die(std::string source);
 
 public:
     //Heals the player
@@ -27,7 +24,7 @@ public:
     void take_damage(int ammount, std::string source);
 
     //Allows the player to attack the enemy
-    void attack(combat* combat);
+    int attack();
 };
 
 #endif 
