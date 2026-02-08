@@ -8,7 +8,7 @@
 class player{
 private:
     int max_health = 10;
-    int current_health;
+    int current_health = 10;
     
     int damage = 2;
 

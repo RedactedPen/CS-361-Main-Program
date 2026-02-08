@@ -4,6 +4,7 @@
 #include <cstdio>
 #include "game.hpp"
 #include "input.hpp"
+#include "tutorial.hpp"
 
 
 int start_screen(){
@@ -30,7 +31,7 @@ int main(){
                 printf("You died!\n");
             }
         }else if(selection == 2){
-            //Show tutorial;
+            tutorial();
         }else if (selection != 3){
             printf("Error processing selection. Exiting the game\n");
             selection = 3;

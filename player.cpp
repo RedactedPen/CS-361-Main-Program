@@ -13,6 +13,7 @@ int player::heal(int ammount){
 void player::take_damage(int ammount, std::string source){
     std::cout << "The  " << source << " deals " << ammount << " damage to you" << std::endl;
     this->current_health -= ammount;
+    std::cout << "You now have " << this->current_health << " health" << std::endl;
 }
 
 int player::attack(){

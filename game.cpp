@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "input.hpp"
 #include <cmath>
+#include "tutorial.hpp"
 
 #define HIGH_ROOM_PROBIBILITY 85
 #define MID_ROOM_PROBIBILITY 45
@@ -352,7 +353,7 @@ room* controller::room_interact(int* entering_side){
     doors[option_number] = this->active_room->doors[*entering_side];
 
     message += std::to_string(option_number + 1);
-    message += ". View tutorial (Currently non funcitonal)\n";
+    message += ". View tutorial\n";
 
     message += std::to_string(option_number + 2);
     message += ". Return to the title screen (Lose all progress)\n";
@@ -369,7 +370,7 @@ room* controller::room_interact(int* entering_side){
         }
         return new_room;
     }else if(input == option_number + 1){
-        printf("\nTutorial currently not implemented\n\n");
+        tutorial();
         return this->active_room;
     }else if(input == option_number + 2){
         return NULL;
