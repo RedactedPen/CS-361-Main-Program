@@ -21,6 +21,7 @@ protected:
 public:
     void damage_enemy(int ammount);
     int encounter(player* player);
+    
 };
 
 #endif

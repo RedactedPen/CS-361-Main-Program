@@ -4,6 +4,7 @@
 #include <vector>
 #include "event.hpp"
 #include "player.hpp"
+#include "event_includer.hpp"
 
 //Board size values
 #define GAME_SIZE 101
@@ -20,9 +21,9 @@
 #define OPPOSITE(val) (val < 2) ?  val + 2 : val - 2 
 
 class room{
-private:
-    event* held_event = NULL;
 public:
+    event* held_event = NULL;
+
     bool found = false;
     bool entered = false;
     
@@ -61,6 +62,10 @@ private:
     //1: Some error was encountered
     int connect_side(room* target_room, int depth, int side);
 
+    //0: Ran properly
+    //1: Error encountered
+    int add_events();
+
 public:
     
     //0: Success
@@ -83,13 +88,15 @@ private:
     player held_player;
 
     room* room_interact(int* entering_side);
-public:
 
-    //Starts a brand new game
     //-1: Error
     //0: Player exited the game
     //1: Player won
     //2: Player lost (died) 
+    int game_loop();
+public:
+
+    //Starts a brand new game    
     int start_game();
 };
 

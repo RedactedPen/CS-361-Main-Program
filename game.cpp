@@ -1,9 +1,12 @@
 #include "game.hpp"
 #include "input.hpp"
+#include <cmath>
 
 #define HIGH_ROOM_PROBIBILITY 85
 #define MID_ROOM_PROBIBILITY 45
 #define LOW_ROOM_PROBIBILITY 20
+
+#define EVENT_DENSITY 40
 
 #define CONNECTION_CHANCE 35
 
@@ -21,7 +24,12 @@ char room::map_representation(){
     if(this->entered == false){
         return '?';
     }else{
-        return (this->pos_x == STARTING_X && this->pos_y == STARTING_Y) ? 'S' : 'R';
+        if(this->pos_x == STARTING_X && this->pos_y == STARTING_Y){
+            return 'S';
+        }else if(this->held_event){
+            return this->held_event->map_representation();
+        }
+        return 'R';
     }
 }
 
@@ -208,6 +216,16 @@ int board::setup_room(room* target_room, int depth, int connecting_side){
     return 0;
 }
 
+int board::add_events(){
+    for(int i = 1; i < this->rooms.size(); i++){
+        int chance = rand() % 100;
+        if(chance <= EVENT_DENSITY){
+            this->rooms.at(i)->held_event = new skeleton;
+        }
+    }
+    return 0;
+}
+
 int board::generate(room** active_room){
     room* starting_room = new room;
 
@@ -245,6 +263,9 @@ int board::generate(room** active_room){
         }
     }
 
+    //Add events as needed
+    this->add_events();
+
     return 0;
 }
 
@@ -262,13 +283,13 @@ void board::print_dungeon(room* current){
                 }else{
                     current_line+= room->map_representation();
                 }
-                if(room->doors[RIGHT]){
+                if(room->doors[RIGHT] && (room->doors[RIGHT]->entered || room->entered)){
                     current_line += "-";
                 }else{
                     current_line += " ";
                 }
 
-                if(room->doors[BOTTOM]){
+                if(room->doors[BOTTOM] && (room->doors[BOTTOM]->entered ||room->entered)){
                     next_line += "| ";
                 }else{
                     next_line += "  ";
@@ -285,8 +306,19 @@ void board::print_dungeon(room* current){
 }
 
 room* controller::room_interact(int* entering_side){
-    
+    if(this->active_room->held_event){
+        int result = this->active_room->held_event->encounter(&this->held_player);
+        switch(result){
+            case 0:
+                break;
+            case 1:
+                return this->active_room->doors[*entering_side];
+        }
+    }
 
+    if(!this->held_player.alive()){
+        return NULL;
+    }
 
     std::string message = "You enter the room.\n";
     int option_number = 1;
@@ -349,15 +381,7 @@ room* controller::room_interact(int* entering_side){
     
 }
 
-int controller::start_game(){
-    int generation_result = this->game_board.generate(&(this->active_room));
-    if(generation_result != 0){
-        printf("Error generating the dungeon. Exiting\n");
-        return -1;
-    }
-
-    
-
+int controller::game_loop(){
     int entering_side = 2;
     room* new_room = this->active_room;
     new_room->found = true;
@@ -375,6 +399,19 @@ int controller::start_game(){
         }
         this->active_room = new_room;        
     }
+    if(this->held_player.alive()){
+        return 0;
+    }else{
+        return 2;
+    }
+}
 
-    return 0;
+int controller::start_game(){
+    int generation_result = this->game_board.generate(&(this->active_room));
+    if(generation_result != 0){
+        printf("Error generating the dungeon. Exiting\n");
+        return -1;
+    }   
+
+    return this->game_loop();
 }

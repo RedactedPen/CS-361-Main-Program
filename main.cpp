@@ -26,6 +26,9 @@ int main(){
             //start game
             controller game_controller;
             int result = game_controller.start_game();
+            if(result == 2){
+                printf("You died!\n");
+            }
         }else if(selection == 2){
             //Show tutorial;
         }else if (selection != 3){

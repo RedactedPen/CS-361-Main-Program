@@ -25,6 +25,9 @@ public:
 
     //Allows the player to attack the enemy
     int attack();
+
+    //Returns whether or not the player is alive
+    bool alive();
 };
 
 #endif 

@@ -18,3 +18,7 @@ void player::take_damage(int ammount, std::string source){
 int player::attack(){
     return this->damage;
 }
+
+bool player::alive(){
+    return this->current_health > 0;
+}
