@@ -1,11 +1,35 @@
-Random Generation
-As a player I want to have each playthrough of the game feature different and random
+Name: Random Generation
+Story: As a player I want to have each playthrough of the game feature different and random
 dungeon layouts and contents so that I do not become bored on repeated playthroughs of
 the game.
+Functional criterion: Given that a player selects the start game option when they are on the title screen
+then a new dungeon will be created.
 
-Losing
-As a player I want to be able to lose the game so that the game has stakes.
+Name: Losing
+Story: As a player I want to be able to lose the game so that the game has stakes.
+Functional criterion: Given that the player is in combat when they drop to 0 health then
+they will lose the current playthrough.
 
-Tutorial
-As a new player I want to have the option to be given a tutorial so that I understand how
+Name: Tutorial
+Story: As a new player I want to have the option to be given a tutorial so that I understand how
 the game works.
+Functional criterion: Given that the player selects the tutorial option when they are playing the game
+or on the title screen then they will be shown the tutorial.
+
+
+
+
+
+
+
+
+
+Quality attribute: Responsivenss
+Non-Functional criterion: The dungeon generation cannot take more than 1 second to create the entire dungeon.
+
+Quality attribute: Accessibility
+Non-Functional criterion: The tutorial must have less than 400 words of informational text.
+
+Quality attribute: Interactivity
+Non-Functional criterion: For each situation the player must be given at least 2 options for how to handle the
+event

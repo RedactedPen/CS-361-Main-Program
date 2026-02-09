@@ -25,7 +25,7 @@ void tutorial(){
             case 2:
                 printf("\nSkeletons\n");
                 printf("Encountering a group of skeletons will cause them to attack you.\n");
-                printf("They have 4 health and have a 75%% chance to do 2 damage\n\n");
+                printf("They have 4 health and have a 75%% chance to do 5 damage\n\n");
                 break;
         }
     }while(selection != 3);
