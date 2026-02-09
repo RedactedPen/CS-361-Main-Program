@@ -1,6 +1,10 @@
 #include "combat.hpp"
 #include "input.hpp"
 
+combat::combat(){
+    this->representation = 'C';
+}
+
 void combat::damage_enemy(int ammount){
     std::cout << "You attack the " << this->enemy_name << " for " << ammount << " damage" << std::endl;
     this->enemy_current_health -= ammount;
@@ -29,6 +33,10 @@ int combat::run_away(){
 }
 
 int combat::encounter(player* player){
+    if(this->enemy_current_health <= 0){
+        return 0;
+    }
+
     do{
         std::string message = "\nYou are in combat with a " + this->enemy_name + "\n";
         message += "1. Attack the " + this->enemy_name + "\n";

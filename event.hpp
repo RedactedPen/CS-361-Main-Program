@@ -10,6 +10,7 @@ public:
 
     //0 Event resolved, nothing else needs to be done
     //1 Event resolved, player needs to be sent back to the room they came from
+    //2 Player won
     virtual int encounter(player* player) = 0;
 
     char map_representation();

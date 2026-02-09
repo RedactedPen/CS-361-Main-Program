@@ -22,12 +22,10 @@ int room_probibility(int depth){
 }
 
 char room::map_representation(){
-    if(this->entered == false){
+    if(false){//this->entered == false){
         return '?';
     }else{
-        if(this->pos_x == STARTING_X && this->pos_y == STARTING_Y){
-            return 'S';
-        }else if(this->held_event){
+        if(this->held_event){
             return this->held_event->map_representation();
         }
         return 'R';
@@ -224,6 +222,15 @@ int board::add_events(){
             this->rooms.at(i)->held_event = new skeleton;
         }
     }
+
+    int half_way = this->rooms.size() / 2;
+    int treasure_room = (rand() % (this->rooms.size() - half_way)) + half_way;
+    if(this->rooms.at(treasure_room)->held_event){
+        delete this->rooms.at(treasure_room)->held_event;
+    }
+    this->rooms.at(treasure_room)->held_event = new treasure;
+
+    this->rooms.at(0)->held_event = new start;
     return 0;
 }
 
@@ -277,20 +284,20 @@ void board::print_dungeon(room* current){
         int num_rooms = 0;
         for(int j = 40; j < GAME_SIZE - 40; j++){
             room* room = this->generation_board[i][j];
-            if(room && room->found){
+            if(room){// && room->found){
                 num_rooms++;
                 if(room == current){
                     current_line +="*";
                 }else{
                     current_line+= room->map_representation();
                 }
-                if(room->doors[RIGHT] && (room->doors[RIGHT]->entered || room->entered)){
+                if(room->doors[RIGHT]){// && (room->doors[RIGHT]->entered || room->entered)){
                     current_line += "-";
                 }else{
                     current_line += " ";
                 }
 
-                if(room->doors[BOTTOM] && (room->doors[BOTTOM]->entered ||room->entered)){
+                if(room->doors[BOTTOM]){// && (room->doors[BOTTOM]->entered ||room->entered)){
                     next_line += "| ";
                 }else{
                     next_line += "  ";
@@ -314,6 +321,8 @@ room* controller::room_interact(int* entering_side){
                 break;
             case 1:
                 return this->active_room->doors[*entering_side];
+            case 2:
+                return NULL;
         }
     }
 
@@ -373,7 +382,15 @@ room* controller::room_interact(int* entering_side){
         tutorial();
         return this->active_room;
     }else if(input == option_number + 2){
-        return NULL;
+        std::string confirmation = "\nAre you sure you want to return to the main menu?\nYou will lose all progress\n\n";
+        confirmation += "1. Yes, return to the menu\n";
+        confirmation += "2. No, stay in the game\n";
+        int selection = get_int_input(1, 2, confirmation);
+        if(selection == 1){
+            return NULL;
+        }else{
+            return this->active_room;
+        }
     }else{
         printf("Error processing input\n");
         return this->active_room;
@@ -398,12 +415,17 @@ int controller::game_loop(){
         if(!new_room){
             break;
         }
+        if(this->active_room != new_room){
+            this->held_player.moves++;
+        }
         this->active_room = new_room;        
     }
-    if(this->held_player.alive()){
-        return 0;
-    }else{
+    if(!this->held_player.alive()){
         return 2;
+    }else if (this->held_player.has_treasure){
+        return 1;
+    }else{
+        return 0;
     }
 }
 

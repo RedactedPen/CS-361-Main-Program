@@ -1,7 +1,7 @@
 #include "skeleton.hpp"
 
 skeleton::skeleton(){
-    this->enemy_name = "Skeleton";
+    this->enemy_name = "[Enemy]";
     this->enemy_max_health = 4;
     this->enemy_current_health = 4;
     this->enemy_damage = 2;

@@ -22,7 +22,7 @@ DEP_DIR = .deps
 DEP = $(patsubst $(SRC_DIR)/%.cpp,$(DEP_DIR)/%.d,$(SRC))
 
 $(EXE): $(OBJ)
-	$(CXX) -lncurses -o $@ $^
+	$(CXX) -o $@ $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(DEP_DIR)/%.d $(OBJ_DIR)/%.o.sentinel $(DEP_DIR)/%.d.sentinel
 	$(CXX) $(DEP_FLAGS) -I . -c -o $@ $<

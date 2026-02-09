@@ -15,6 +15,10 @@ private:
     std::vector<item> inventory;
 
 public:
+
+    bool has_treasure = false;
+    int moves = 0;
+
     //Heals the player
     //Returns the ammount of health restored
     int heal(int ammount);

@@ -3,6 +3,7 @@
 int main(){
     //printf("\n");
 
+    printf("Information the player needs to know to understand what is going on\n");
     printf("Description of what the player is being asked to make a decision about\n");
     printf("1. The player's first option\n2. The player's second option\n3. The player's third option\n");
     printf("Information on how to view the player's information, history, or exit the game\n");

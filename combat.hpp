@@ -5,8 +5,6 @@
 #include <iostream>
 
 class combat: public event {
-private:
-    char representation = 'C';
 protected:
     std::string enemy_name;
     int enemy_max_health;
@@ -21,6 +19,7 @@ protected:
 public:
     void damage_enemy(int ammount);
     int encounter(player* player);
+    combat();
     
 };
 
