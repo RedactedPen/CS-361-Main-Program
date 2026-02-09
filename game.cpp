@@ -292,19 +292,19 @@ void board::print_dungeon(room* current){
                     current_line+= room->map_representation();
                 }
                 if(room->doors[RIGHT]){// && (room->doors[RIGHT]->entered || room->entered)){
-                    current_line += "-";
+                    current_line += "--";
                 }else{
-                    current_line += " ";
+                    current_line += "  ";
                 }
 
                 if(room->doors[BOTTOM]){// && (room->doors[BOTTOM]->entered ||room->entered)){
-                    next_line += "| ";
+                    next_line += "|  ";
                 }else{
-                    next_line += "  ";
+                    next_line += "   ";
                 }
             }else{
-                current_line += "  ";
-                next_line += "  ";
+                current_line += "   ";
+                next_line += "   ";
             }       
         }
         if(num_rooms){
@@ -356,7 +356,7 @@ room* controller::room_interact(int* entering_side){
             option_number++;
         }
     }
-
+    
     message += std::to_string(option_number);
     message += ". Return through the door behind you\n";
     doors[option_number] = this->active_room->doors[*entering_side];
@@ -382,7 +382,7 @@ room* controller::room_interact(int* entering_side){
         tutorial();
         return this->active_room;
     }else if(input == option_number + 2){
-        std::string confirmation = "\nAre you sure you want to return to the main menu?\nYou will lose all progress\n\n";
+        std::string confirmation = "Are you sure you want to return to the main menu?\nYou will lose all progress\n\n";
         confirmation += "1. Yes, return to the menu\n";
         confirmation += "2. No, stay in the game\n";
         int selection = get_int_input(1, 2, confirmation);
@@ -403,7 +403,7 @@ int controller::game_loop(){
     int entering_side = 2;
     room* new_room = this->active_room;
     new_room->found = true;
-    while(1){       
+    while(1){      
         new_room->entered = true;
         for(int i = 0; i < 4; i++){
             if(new_room->doors[i]){

@@ -10,7 +10,7 @@ private:
     int max_health = 10;
     int current_health = 10;
     
-    int damage = 2;
+    
 
     std::vector<item> inventory;
 
@@ -18,6 +18,7 @@ public:
 
     bool has_treasure = false;
     int moves = 0;
+    int damage = 2;
 
     //Heals the player
     //Returns the ammount of health restored

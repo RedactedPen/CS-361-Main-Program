@@ -1,0 +1,11 @@
+Random Generation
+As a player I want to have each playthrough of the game feature different and random
+dungeon layouts and contents so that I do not become bored on repeated playthroughs of
+the game.
+
+Losing
+As a player I want to be able to lose the game so that the game has stakes.
+
+Tutorial
+As a new player I want to have the option to be given a tutorial so that I understand how
+the game works.

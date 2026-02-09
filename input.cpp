@@ -28,5 +28,7 @@ int get_int_input(int min, int max, std::string message){
         }
         sucess = true;
     }
+
+    std::cout << std::endl << std::endl;
     return to_return;
 }

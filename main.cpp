@@ -9,6 +9,7 @@
 
 int start_screen(){
     std::string menu = "Welcome to DungeonCrawler.exe\n";
+    menu += "Have a blast by venturing into the dungeon and battling your way to ancient treasure!\n";
     menu += "1. Start new game\n";
     menu += "2. View tutorial\n";
     menu += "3. Exit Game\n";

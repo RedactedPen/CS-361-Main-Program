@@ -39,7 +39,8 @@ int combat::encounter(player* player){
 
     do{
         std::string message = "\nYou are in combat with a " + this->enemy_name + "\n";
-        message += "1. Attack the " + this->enemy_name + "\n";
+        message += "The " + this->enemy_name + " has " + std::to_string(this->enemy_current_health) + " health remaining\n"; 
+        message += "1. Attack the " + this->enemy_name + " (" + std::to_string(player->damage) + " damage)\n";
         message += "2. Attempt to run away (" + std::to_string(this->enemy_flee_chance) + "% chance of success)\n";
         int input = get_int_input(1, 2, message);
 
