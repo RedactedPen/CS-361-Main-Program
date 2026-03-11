@@ -5,10 +5,17 @@
 #include "game.hpp"
 #include "input.hpp"
 #include "tutorial.hpp"
-
+#include "transmit.hpp"
 
 int start_screen(){
-    std::string menu = "Welcome to DungeonCrawler.exe\n";
+    std::string menu = "Welcome to \n";
+    std::string title = send_request(CONVERTER, "1:Dungeon");
+    title += send_request(CONVERTER, "1:Crawler");
+    if(title == ""){
+        std::cout << "Encounterd error. Exiting" << std::endl;
+        return 3;
+    }
+    menu += title;
     menu += "Have a blast by venturing into the dungeon and battling your way to ancient treasure!\n";
     menu += "1. Start new game\n";
     menu += "2. View tutorial\n";
@@ -29,7 +36,8 @@ int main(){
             controller game_controller;
             int result = game_controller.start_game();
             if(result == 2){
-                printf("You died!\n");
+                std::string death_message = send_request(COLORER, "red:You died!");
+                std::cout << death_message << std::endl;
             }
         }else if(selection == 2){
             tutorial();

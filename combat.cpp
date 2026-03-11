@@ -1,5 +1,6 @@
 #include "combat.hpp"
 #include "input.hpp"
+#include "transmit.hpp"
 
 combat::combat(){
     this->representation = 'C';
@@ -7,11 +8,20 @@ combat::combat(){
 
 void combat::damage_enemy(int ammount){
     std::cout << "You attack the " << this->enemy_name << " for " << ammount << " damage" << std::endl;
+
+    std::string damage_line = send_request(PHRASE, "damage");
+    damage_line = send_request(COLORER, "yellow:" + damage_line);
+    std::cout << damage_line << std::endl;
+
     this->enemy_current_health -= ammount;
 }
 
 void combat::enemy_attack(player* player){
     int attack_chance = 1 + (rand() % 100);
+
+    std::string attack_line = send_request(PHRASE, "attack");
+    attack_line = send_request(COLORER, "yellow:" + attack_line);
+    std::cout << attack_line << std::endl;
 
     if(attack_chance <= this->enemy_hit_chance){
         std::cout << "The " << this->enemy_name << " attacks you!\n";
